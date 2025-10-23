@@ -1,0 +1,26 @@
+name: Run Gemini every hour
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # 매시 정각마다 자동 실행
+  workflow_dispatch:       # 수동 실행 버튼을 위한 옵션
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Gemini SDK
+        run: pip install google-genai
+
+      - name: Run Gemini Script
+        run: python main.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
